@@ -1,24 +1,50 @@
 import { useEffect, useState } from "react";
-
+import axios from "axios";
 import Comments from "./Comments";
 import AddCommentForm from "./AddCommentForm";
-import data from "../mockData/comments";
 
 const App = () => {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    // async action and fetching data
-    setComments(data);
-    console.log(comments);
+    const fetchComments = async () => {
+      const { data } = await axios.get("/api/comments");
+      setComments(data);
+    };
+    fetchComments();
   }, []);
 
-  console.log(comments);
+  const handleMoreReplies = async (commentId) => {
+    const { data } = await axios.get(
+      `/api/comment_replies?comment_id=${commentId}`
+    );
+    setComments(
+      comments.map((comment) => {
+        if (comment.id === commentId) {
+          return { ...comment, replies: comment.replies.concat(data) };
+        } else {
+          return comment;
+        }
+      })
+    );
+  };
+
+  const handleSubmit = async (newComment, callback) => {
+    try {
+      const { data } = await axios.post("/api/comments", { ...newComment });
+      setComments(comments.concat(data));
+      if (callback) {
+        callback();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <div>
-      <Comments comments={comments} />
-      <AddCommentForm />
+      <Comments comments={comments} onMoreReplies={handleMoreReplies} />
+      <AddCommentForm onSubmit={handleSubmit} />
     </div>
   );
 };
