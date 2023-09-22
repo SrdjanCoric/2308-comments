@@ -10,7 +10,7 @@
     "react/prop-types": 0,
     "react/react-in-jsx-scope": 0
   },
-  "plugins": ["react", "import"],
+  "plugins": ["import", "react", "testing-library", "jest-dom"],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module",
@@ -21,6 +21,7 @@
   "env": {
     "es6": true,
     "browser": true,
-    "node": true
+    "node": true,
+    "jest": true
   }
 }
