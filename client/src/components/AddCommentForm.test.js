@@ -7,11 +7,8 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import AddCommentForm from "./AddCommentForm";
 
-beforeEach(() => {
-  render(<AddCommentForm />);
-});
-
 test("contains h2 heading", () => {
+  render(<AddCommentForm />);
   const heading = screen.getByRole("heading", {
     name: "Post a Comment",
     level: 2,
